@@ -14,6 +14,13 @@ export default function getTheme() {
             header: {
                 background: brand.dark,
                 text: brand.lighter
+            },
+            overall: {
+                background: brand.darker
+            },
+            search: {
+                background: brand.light,
+                text: 'white'
             }
         }
     })

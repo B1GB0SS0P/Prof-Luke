@@ -8,11 +8,12 @@ export default function Header() {
     <Box
       sx={{
         bgcolor: theme.palette.header.background,
-        px: 4, // horizontal padding
-        py: 2, // vertical padding
+        px: 4,
+        py: 2,
         borderRadius: 5,
         display: "flex",
-        border: "none",
+        justifyContent: "center", // Center horizontally
+        alignItems: "center",     // Center vertically (optional)
         textAlign: "center"
       }}
     >
@@ -22,7 +23,8 @@ export default function Header() {
         sx={{
           color: theme.palette.header.text,
           letterSpacing: 1,
-          userSelect: "none"
+          userSelect: "none",
+          fontWeight: '700'
         }}
       >
         The Professor's Database
@@ -30,3 +32,4 @@ export default function Header() {
     </Box>
   );
 }
+

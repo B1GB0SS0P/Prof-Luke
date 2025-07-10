@@ -8,9 +8,8 @@ export default function App() {
   const theme = getTheme()
   return (
      <ThemeProvider theme={theme}>
-      <Header />
-
-      <Search />
+        <Header />
+        <Search />
     </ThemeProvider>
   )
 }

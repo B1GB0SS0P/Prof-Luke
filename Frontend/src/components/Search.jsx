@@ -21,6 +21,7 @@ import {
   Clear as ClearIcon,
   ErrorOutline as ErrorIcon
 } from '@mui/icons-material';
+import { useTheme } from "@mui/material/styles";
 
 const CSVSearchComponent = () => {
   const [csvData, setCsvData] = useState([]);
@@ -28,6 +29,7 @@ const CSVSearchComponent = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const theme = useTheme();
 
   // Path to your CSV file
   const CSV_FILE_PATH = 'luke.csv';
@@ -137,9 +139,9 @@ const CSVSearchComponent = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 3 }}>
+    <Container maxWidth="lg" sx={{ mt: 5, py: 3, bgcolor: theme.palette.header.background, borderRadius: 5 }}>
       {/* Search Bar */}
-      <Paper elevation={2} sx={{ p: 2, mb: 3 }}>
+      <Paper elevation={2} sx={{ p: 2, mb: 3, borderRadius: 5, backgroundColor: theme.palette.search.background }}>
         <TextField
           fullWidth
           variant="outlined"
@@ -162,7 +164,7 @@ const CSVSearchComponent = () => {
           }}
         />
         
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5, color: 'white' }}>
           {searchTerm 
             ? `Found ${filteredData.length} of ${csvData.length} rows`
             : `Showing all ${csvData.length} rows`
@@ -171,16 +173,19 @@ const CSVSearchComponent = () => {
       </Paper>
 
       {/* Results Table */}
-      <TableContainer component={Paper} elevation={2}>
+      <TableContainer component={Paper} elevation={2} sx={{borderRadius: 5, bgcolor: theme.palette.search.background, color: 'white', minWidth: '920px' }}> {/* Fix the min width */}
         <Table stickyHeader>
-          <TableHead>
+          <TableHead sx={{}}>
             <TableRow>
               {headers.map((header, index) => (
                 <TableCell
                   key={index}
                   sx={{ 
-                    fontWeight: 500,
-                    whiteSpace: 'nowrap'
+                    fontWeight: 700,
+                    whiteSpace: 'nowrap',
+                    bgcolor: theme.palette.search.background,
+                    fontSize: '20px',
+                    color: theme.palette.search.text
                   }}
                 >
                   {header}
@@ -205,7 +210,6 @@ const CSVSearchComponent = () => {
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
-                      maxWidth: '200px'
                     }}
                     title={cell}
                   >
