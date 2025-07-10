@@ -12,8 +12,8 @@ export default function Header() {
         py: 2, // vertical padding
         borderRadius: 5,
         display: "flex",
-        alignItems: "center",
         border: "none",
+        textAlign: "center"
       }}
     >
       <Typography
@@ -22,7 +22,7 @@ export default function Header() {
         sx={{
           color: theme.palette.header.text,
           letterSpacing: 1,
-          userSelect: "none",
+          userSelect: "none"
         }}
       >
         The Professor's Database

@@ -1,4 +1,236 @@
-import { Box } from "@mui/material"
-export default function Search() {
-    return (<Box></Box>)
-}
+import React, { useState, useMemo, useEffect } from 'react';
+import {
+  Box,
+  Typography,
+  TextField,
+  InputAdornment,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  CircularProgress,
+  Alert,
+  Container
+} from '@mui/material';
+import {
+  Search as SearchIcon,
+  Clear as ClearIcon,
+  ErrorOutline as ErrorIcon
+} from '@mui/icons-material';
+
+const CSVSearchComponent = () => {
+  const [csvData, setCsvData] = useState([]);
+  const [headers, setHeaders] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Path to your CSV file
+  const CSV_FILE_PATH = 'luke.csv';
+
+  useEffect(() => {
+    const loadCSV = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        // Read the fixed CSV file
+        const response = await fetch(CSV_FILE_PATH);
+        const csvText = await response.text();
+        
+        // Parse CSV manually
+        const lines = csvText.split('\n').filter(line => line.trim());
+        
+        if (lines.length > 0) {
+          const parseCSVLine = (line) => {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+              const char = line[i];
+              if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === ',' && !inQuotes) {
+                result.push(current.trim());
+                current = '';
+              } else {
+                current += char;
+              }
+            }
+            result.push(current.trim());
+            return result;
+          };
+
+          const parsedData = lines.map(parseCSVLine);
+          const cleanHeaders = parsedData[0].map(header => header.replace(/"/g, '').trim());
+          setHeaders(cleanHeaders);
+          setCsvData(parsedData.slice(1));
+        }
+      } catch (err) {
+        setError('Failed to load CSV file. Please ensure the file exists and is accessible.');
+        console.error('Error loading CSV:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadCSV();
+  }, []);
+
+  const filteredData = useMemo(() => {
+    if (!searchTerm.trim()) return csvData;
+    
+    return csvData.filter(row => {
+      return row.some(cell => {
+        if (cell === null || cell === undefined) return false;
+        return cell.toString().toLowerCase().includes(searchTerm.toLowerCase());
+      });
+    });
+  }, [csvData, searchTerm]);
+
+  const clearSearch = () => {
+    setSearchTerm('');
+  };
+
+  if (isLoading) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 3 }}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="400px"
+        >
+          <Paper elevation={2} sx={{ p: 5, textAlign: 'center' }}>
+            <CircularProgress size={40} sx={{ mb: 2 }} />
+            <Typography variant="body1" color="text.secondary">
+              Loading CSV data...
+            </Typography>
+          </Paper>
+        </Box>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 3 }}>
+        <Alert 
+          severity="error" 
+          icon={<ErrorIcon />}
+          sx={{ textAlign: 'center' }}
+        >
+          <Typography variant="h6" component="div" sx={{ mb: 1 }}>
+            Error Loading Data
+          </Typography>
+          <Typography variant="body2">
+            {error}
+          </Typography>
+        </Alert>
+      </Container>
+    );
+  }
+
+  return (
+    <Container maxWidth="lg" sx={{ py: 3 }}>
+      {/* Search Bar */}
+      <Paper elevation={2} sx={{ p: 2, mb: 3 }}>
+        <TextField
+          fullWidth
+          variant="outlined"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search across all columns..."
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon color="action" />
+              </InputAdornment>
+            ),
+            endAdornment: searchTerm && (
+              <InputAdornment position="end">
+                <IconButton onClick={clearSearch} edge="end">
+                  <ClearIcon />
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+        
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5 }}>
+          {searchTerm 
+            ? `Found ${filteredData.length} of ${csvData.length} rows`
+            : `Showing all ${csvData.length} rows`
+          }
+        </Typography>
+      </Paper>
+
+      {/* Results Table */}
+      <TableContainer component={Paper} elevation={2}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              {headers.map((header, index) => (
+                <TableCell
+                  key={index}
+                  sx={{ 
+                    fontWeight: 500,
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  {header}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredData.map((row, rowIndex) => (
+              <TableRow
+                key={rowIndex}
+                sx={{ 
+                  '&:nth-of-type(odd)': { 
+                    backgroundColor: 'action.hover' 
+                  }
+                }}
+              >
+                {row.map((cell, cellIndex) => (
+                  <TableCell
+                    key={cellIndex}
+                    sx={{
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      maxWidth: '200px'
+                    }}
+                    title={cell}
+                  >
+                    {cell || '-'}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        
+        {filteredData.length === 0 && searchTerm && (
+          <Box sx={{ p: 5, textAlign: 'center' }}>
+            <SearchIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              No results found
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Try adjusting your search term
+            </Typography>
+          </Box>
+        )}
+      </TableContainer>
+    </Container>
+  );
+};
+
+export default CSVSearchComponent;
