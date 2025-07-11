@@ -4,8 +4,8 @@ export default function getTheme() {
     const brand = {
         lighter: '#A9CEF4',
         light: '#7EA0B7',
-        neutral: '#597081',
-        dark: '#36494E',
+        neutral: '#22374C',
+        dark: '#131D26',
         darker: '#000'
     }
 
@@ -19,7 +19,7 @@ export default function getTheme() {
                 background: brand.darker
             },
             search: {
-                background: brand.light,
+                background: brand.neutral,
                 text: 'white'
             }
         }

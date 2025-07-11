@@ -14,14 +14,15 @@ export default function Header() {
         display: "flex",
         justifyContent: "center", // Center horizontally
         alignItems: "center",     // Center vertically (optional)
-        textAlign: "center"
+        textAlign: "center",
+        border: "2px solid white"
       }}
     >
       <Typography
         variant="h5"
         component="h1"
         sx={{
-          color: theme.palette.header.text,
+          color: "white",
           letterSpacing: 1,
           userSelect: "none",
           fontWeight: '700'
