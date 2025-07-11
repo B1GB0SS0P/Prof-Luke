@@ -12,14 +12,14 @@ export default function getTheme() {
     return createTheme({
         palette: {
             header: {
-                background: brand.dark,
+                background: brand.neutral,
                 text: brand.lighter
             },
             overall: {
                 background: brand.darker
             },
             search: {
-                background: brand.neutral,
+                background: brand.light,
                 text: 'white'
             }
         }

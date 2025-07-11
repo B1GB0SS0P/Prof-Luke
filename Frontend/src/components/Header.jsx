@@ -15,7 +15,7 @@ export default function Header() {
         justifyContent: "center", // Center horizontally
         alignItems: "center",     // Center vertically (optional)
         textAlign: "center",
-        border: "2px solid white"
+        border: "2px solid #26323e"
       }}
     >
       <Typography

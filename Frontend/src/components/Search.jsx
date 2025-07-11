@@ -105,7 +105,7 @@ const CSVSearchComponent = () => {
 
   if (isLoading) {
     return (
-      <Container maxWidth="lg" sx={{ py: 3 }}>
+      <Container sx={{ py: 3, width: 1600, maxWidth: '100%' }}>
         <Box
           display="flex"
           justifyContent="center"
@@ -125,7 +125,7 @@ const CSVSearchComponent = () => {
 
   if (error) {
     return (
-      <Container maxWidth="lg" sx={{ py: 3 }}>
+      <Container sx={{ py: 3, width: 1600, maxWidth: '100%' }}>
         <Alert
           severity="error"
           icon={<ErrorIcon />}
@@ -142,12 +142,13 @@ const CSVSearchComponent = () => {
 
   return (
     <Container
-      maxWidth="lg"
       sx={{
         mt: 5,
         py: 3,
         bgcolor: theme.palette.header.background,
         borderRadius: 5,
+        width: 1600, 
+        maxWidth: '100%'
       }}
     >
       {/* Search Bar */}
@@ -157,7 +158,8 @@ const CSVSearchComponent = () => {
           p: 2,
           mb: 3,
           borderRadius: 5,
-          backgroundColor: theme.palette.search.background,
+          backgroundColor: "white",
+          border: "2px solid #26323e",
         }}
       >
         <TextField
@@ -169,42 +171,43 @@ const CSVSearchComponent = () => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ color: "white" }} />
+                <SearchIcon sx={{ color: "#26323e" }} />
               </InputAdornment>
             ),
             endAdornment: searchTerm && (
               <InputAdornment position="end">
                 <IconButton onClick={clearSearch} edge="end">
-                  <ClearIcon sx={{ color: "white" }} />
+                  <ClearIcon sx={{ color: "#26323e" }} />
                 </IconButton>
               </InputAdornment>
             ),
           }}
           sx={{
-            input: { color: "white" }, // Text input
+            input: { color: "#26323e" }, // Text input color
             "& .MuiInputBase-root": {
-              color: "white", // Value text color
+              color: "#26323e",
             },
             "& .MuiInputBase-input::placeholder": {
-              color: "white",
-              opacity: 1, // Fully visible
+              color: "#26323e",
+              opacity: 1,
             },
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white",
+              borderColor: "#26323e",
             },
-            "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white",
+            "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#26323e",
             },
-            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white",
-            },
+            "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+              {
+                borderColor: "#26323e",
+              },
           }}
         />
 
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ mt: 1.5, color: "white" }}
+          sx={{ mt: 1.5, color: "#26323e" }}
         >
           {searchTerm
             ? `Found ${filteredData.length} of ${csvData.length} rows`
@@ -218,9 +221,8 @@ const CSVSearchComponent = () => {
         elevation={2}
         sx={{
           borderRadius: 5,
-          bgcolor: theme.palette.search.background,
-          color: "white",
-          minWidth: "920px",
+          bgcolor: "white",
+          color: "#26323e",
         }}
       >
         {" "}
@@ -234,9 +236,9 @@ const CSVSearchComponent = () => {
                   sx={{
                     fontWeight: 700,
                     whiteSpace: "nowrap",
-                    bgcolor: theme.palette.search.background,
+                    bgcolor: "white",
                     fontSize: "20px",
-                    color: theme.palette.search.text,
+                    color: "#26323e",
                   }}
                 >
                   {header}
@@ -258,9 +260,9 @@ const CSVSearchComponent = () => {
                   <TableCell
                     key={cellIndex}
                     sx={{
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
+                      whiteSpace: "wrap", // Prevents wrapping
+                      maxWidth: "auto", // Allow natural width
+                      overflow: "visible", // No clipping
                     }}
                     title={cell}
                   >
