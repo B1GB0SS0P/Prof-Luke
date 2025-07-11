@@ -106,6 +106,6 @@ for filePath in tqdm(image_paths, desc="Processing images"):
     
     # Move image from images to completed
     file = os.path.basename(filePath)
-    # shutil.move(filePath, os.path.join(r'./Backend/completed', file))
+    shutil.move(filePath, os.path.join(r'./Backend/completed', file))
 
 print("All done! Thank you for using the image inserter:)")
