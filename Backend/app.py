@@ -5,8 +5,6 @@ import os
 import shutil
 from tqdm import tqdm
 
-
-
 print('👋 Hi Luke!')
 print('Welcome to your Image Inserter!')
 print()
@@ -14,11 +12,12 @@ def encodeImage(image_path): #encoder
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
 print('Loading Files...')    
-image_dir = os.path.abspath(r'./Backend/images')
+image_dir = os.path.abspath(r'./Prof-Luke/Backend/images')
 image_paths = []
 for root, _, files in os.walk(image_dir):
     for file in files:
         image_paths.append(os.path.join(root, file))
+print(image_paths)
 print('Files Loaded!')
 
 # Walk through images folder where all the pics shld be
@@ -96,13 +95,17 @@ for filePath in tqdm(image_paths, desc="Processing images"):
         content_lines = lines[content_idx + 1:speaker_idx]
     content = " | ".join(content_lines)
 
+    # C:\Users\BOSS OP\Documents\luke\Prof-Luke\Frontend\public\luke.csv
+    # with open(os.path.abspath(r"./Prof-Luke/Frontend/public/luke.tsv"), "w", newline="", encoding="utf-8") as f:
+    #     writer = csv.writer(f, delimiter="\t")
+    #     writer.writerow(["Date", "Title", "Content", "Speaker"])
     # Save results into luke.csv
-    with open("luke.csv", "a", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
+    with open(os.path.abspath(r"./Prof-Luke/Frontend/public/luke.tsv"), "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f, delimiter="\t")
         writer.writerow([date, title, content, speaker])
     
     # Move image from images to completed
     file = os.path.basename(filePath)
-    shutil.move(filePath, os.path.join(r'./Backend/completed', file))
+    # shutil.move(filePath, os.path.join(r'./Backend/completed', file))
 
 print("All done! Thank you for using the image inserter:)")
